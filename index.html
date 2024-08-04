@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <link rel="icon" type="image/png" sizes="32x32" href="./assets/images/favicon-32x32.png">
+
+  <!-- fonttts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Figtree:ital,wght@0,300..900;1,300..900&family=Inter:wght@100..900&family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&family=Poppins:wght@500;700&display=swap"
+    rel="stylesheet">
+  <!-- fonttts -->
+  <!-- font awsome -->
+  <link rel="stylesheet" href="styles/all.min.css">
+  <!-- font awsome -->
+
+  <title>Mortgage repayment calculator</title>
+
+  <style>
+    :root {
+      --primary-color: #133040;
+      --input-color: #0e2431;
+      --background: #e3f4fc;
+      --secondary-color: #d9db30;
+      --cool: #fafae0;
+    }
+
+    * {
+      font-family: "Plus Jakarta Sans", sans-serif;
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    label {
+      font-size: .8rem;
+      opacity: .8;
+    }
+
+    body {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      height: 100vh;
+      width: 100%;
+      background-color: var(--background);
+    }
+
+    .container {
+      background-color: white;
+      width: 65%;
+      display: flex;
+      height: 65%;
+      justify-content: center;
+      flex-wrap: wrap;
+      border-radius: 10px;
+      box-shadow: 1px 1px 5px #ccc;
+    }
+
+    .head {
+      font-size: 1.2rem;
+      margin-bottom: 15px;
+    }
+
+
+    .calculate {
+      flex-basis: 50%;
+      padding: 20px;
+      position: relative;
+      background-color: white;
+      border-radius: 10px 0 0 10px;
+    }
+
+    .calculate .clear {
+      border: none;
+      background: none;
+      border-bottom: 1px solid #444;
+      position: absolute;
+      top: 23px;
+      right: 5px;
+      font-size: .7rem;
+      cursor: pointer;
+    }
+
+    .calculate form {
+      padding: 20px;
+    }
+
+    .calculate form label {
+      font-size: .7rem;
+      display: block;
+      margin: 7px 0;
+    }
+
+    .calculate form input {
+      padding: 5px;
+      border-radius: 3px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      margin-bottom: 10px;
+      font-size: 1rem;
+      font-weight: bold;
+      width: 100%;
+    }
+
+    .calculate form input:focus {
+      border: 1px solid var(--secondary-color);
+      outline: none;
+    }
+
+    .calculate form .amount-holder {
+      position: relative;
+    }
+
+    .calculate form .amount-holder #mortgage-amount {
+      width: 100%;
+      padding-left: 30px;
+    }
+
+    .calculate form .amount-holder .pound {
+      background-color: var(--background);
+      padding: 8px;
+      position: absolute;
+      border-radius: 5px 0 0 5px;
+      left: 0;
+      top: 0;
+    }
+
+    .calculate .smalls {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-direction: row;
+    }
+
+    .calculate .smalls .form-group {
+      width: 48%;
+    }
+
+    .calculate .op-repayment,
+    .calculate .op-interset {
+      width: 100%;
+      font-weight: bold;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      margin: 5px 0;
+      padding: 7px 3px;
+      position: relative;
+      cursor: pointer;
+      transition: .3s;
+    }
+
+    .calculate .op-repayment span:nth-child(2),
+    .calculate .op-interset span:nth-child(2) {
+      padding-left: 35px;
+    }
+
+    .calculate .active {
+      position: absolute;
+      border-radius: 50%;
+      width: 20px;
+      height: 20px;
+      border: 3px solid var(--secondary-color);
+    }
+
+    .calculate .active::before {
+      content: '';
+      position: absolute;
+      background-color: var(--secondary-color);
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      border: 2px solid white;
+      top: 0;
+      left: 0;
+    }
+    .calculate form #submit {
+      padding: 12px;
+      outline: none;
+      border: none;
+      border-radius: 25px;
+      background-color: var(--secondary-color);
+      color: black;
+      cursor: pointer;
+      font-size: .89rem;
+      font-weight: bold;
+      transition: .3s;
+      margin-top: 15px;
+      width: 85%;
+    }
+
+    .calculate form #submit:hover {
+      background-color: var(--background);
+    }
+
+    .result {
+      flex-basis: 50%;
+      background-color: var(--primary-color);
+      color: white;
+      padding: 20px;
+      border-radius: 0 10px 10px 25px;
+    }
+
+    .result .success-status p {
+      margin: 10px 0;
+      font-size: .8rem;
+      opacity: .7;
+    }
+
+    .success-status .form-group {
+      width: 100%;
+      padding: 10px;
+      margin-top: 20px;
+      margin-bottom: 20px;
+      background-color: var(--input-color);
+      border-top: 3px solid var(--secondary-color);
+      border-radius: 10px;
+    }
+
+    .success-status .form-group label {
+      display: block;
+    }
+
+    .success-status .form-group input {
+      background: none;
+      border: none;
+      outline: none;
+    }
+
+    .success-status .form-group #month-repayment {
+      width: 100%;
+      padding: 5px 0 5px 30px;
+      border-radius: 3px;
+      color: var(--secondary-color);
+      font-size: 2.3rem;
+      margin-bottom: 5px;
+      font-weight: bold;
+    }
+
+    .success-status .form-group .input1,
+    .success-status,
+    .form-group,
+    .input2 {
+      position: relative;
+    }
+
+    .success-status .form-group .input1 .pound {
+      position: absolute;
+      left: 0;
+      top: 29px;
+      padding-left: 3px;
+      font-size: 2rem;
+      color: var(--secondary-color);
+    }
+
+    .success-status .form-group .input2 .pound {
+      position: absolute;
+      left: 0;
+      top: 29px;
+      font-size: 1.2rem;
+      padding-left: 3px;
+    }
+
+    .success-status .line {
+      border-width: 1px;
+      border-color: rgb(161, 160, 160);
+      margin: 15px 0;
+    }
+
+    .success-status .form-group #total {
+      padding: 5px 0 5px 25px;
+      color: var(--background);
+      font-size: 1.2rem;
+      font-weight: bold;
+      margin: 5px 0;
+    }
+
+    .result .error-status {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      text-align: center;
+      padding: 20px 0;
+      display: none;
+    }
+
+    .error-status p {
+      margin: 10px 0;
+      opacity: .6;
+      font-size: .8.1rem;
+    }
+
+    body .attribution {
+      position: absolute;
+      top: 11.5%;
+      font-size: 11px;
+      text-align: center;
+      margin-top: 10px;
+      padding: 5px;
+      background-color: white;
+      border-radius: 5px 5px 0 0;
+      animation: loffy 3s linear infinite;
+    }
+
+    .attribution a {
+      color: hsl(228, 45%, 44%);
+      text-decoration: none;
+      color: var(--secondary-color);
+    }
+
+    @keyframes loffy {
+      0% {
+        transform: translateX(0);
+        background-color: white;
+      
+      }
+
+      33.3% {
+        transform: translateX(25px);
+        background-color:var(--primary-color);
+        color: white;
+      }
+
+      66.3% {
+        transform: translateX(-25px);
+        background-color: white;
+      }
+
+      100% {
+        transform: translateX(0);
+      }
+    }
+
+    @media (max-width:768px) {
+
+      .calculate,
+      .result {
+        flex-basis: 100%;
+      }
+
+      .calculate {
+        border-radius: 10px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="container">
+
+    <!-- start calculate side -->
+    <div class="calculate">
+      <h2 class="head">Mortgage Calculator</h2>
+      <form action="">
+        <button class="clear">
+          Clear All
+        </button>
+        <div class="form-group">
+          <label for="mortgage-amount">Mortgage Amount</label>
+          <div class="amount-holder">
+            <input type="number" id="mortgage-amount" name="mortgage-amount" required>
+            <i class="fa-solid fa-sterling-sign pound"></i>
+          </div>
+        </div>
+        <div class="smalls">
+          <div class="form-group">
+            <label for="mortgage-term">Mortgage Term</label>
+            <input type="number" id="mortgage-term" name="mortgage-term" required>
+          </div>
+          <div class="form-group">
+            <label for="interest-rate">Interest Rate</label>
+            <input type="number" id="interest-rate" name="interest-rate" required>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="mortgage-amount">Mortgage Type</label>
+          <div class="op-repayment">
+            <span id="repayment" class="active"></span>
+            <span>Repayment</span>
+          </div>
+          <div class="op-interset">
+            <span id="interest"></span>
+            <span>Interest Only</span>
+          </div>
+          </select>
+        </div>
+        <button id="submit">
+          <i class="fa-solid fa-calculator"></i> calculate repayment
+        </button>
+      </form>
+    </div>
+    <!-- end calculate side -->
+
+    <!-- start result side -->
+    <div class="result">
+      <div class="success-status">
+        <h2 class="head">Your Result</h2>
+        <p>Your results shown below based on the information you provided. To adjust the results.edit the form and
+          click"calculate repayment"again.</p>
+        <div class="form-group">
+          <div class="input1">
+            <label for="month-repayments">Your monthly repayments</label>
+            <input type="text" id="month-repayment" readonly value="1,234.75">
+            <i class="fa-solid fa-sterling-sign pound"></i>
+          </div>
+          <hr class="line">
+          <div class="input2">
+            <label for="total">Total you`ll repay over the term</label>
+            <input type="text" id="total" readonly value="345,345.74">
+            <i class="fa-solid fa-sterling-sign pound"></i>
+          </div>
+        </div>
+      </div>
+      <div class="error-status">
+        <img src="./assets/images/illustration-empty.svg" alt="">
+        <h2 class="head">No Results Shown Hrer</h2>
+        <p>Complete the form and click "calculate repayments"to see what your monthly repayments would be.</p>
+      </div>
+
+    </div>
+    <!-- end result side -->
+
+  </div>
+  <div class="attribution">
+    Challenge by <a href="https://www.frontendmentor.io?ref=challenge">Frontend Mentor</a>.
+    Coded by <a href="https://github.com/Amar-Dev1">Amar</a>.
+  </div>
+</body>
+
+</html>
